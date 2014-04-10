@@ -105,10 +105,13 @@ module Bandwidth
       #   audio = Bandwidth::Audio::Sentence.new "Call has been transferred"
       #   bandwidth.transfer "c-xytsl6nfcayzsxdbqq7q36i", "+19195551212", audio: audio
       #
+      #
+      #       #
+      #
       def transfer call_id, target, options={}
-        parameters = {state: 'transferring', transfer_to: target}
-        parameters.merge!({transfer_caller_id: options[:transfer_caller_id]}) if options[:transfer_caller_id]
-        parameters.merge!({whisper_audio: options[:audio].to_hash}) if options[:audio]
+        parameters = {state: 'transferring', transferTo: target}
+        parameters.merge!({transferCallerId: options[:transferCallerId]}) if options[:transferCallerId]
+        parameters.merge!({whisperAudio: options[:audio].to_hash}) if options[:audio]
 
         _body, headers = post "calls/#{call_id}", parameters
 
