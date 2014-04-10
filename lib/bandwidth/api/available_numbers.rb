@@ -31,14 +31,14 @@ module Bandwidth
       def available_numbers options = {}
         raise ArgumentError, "ZIP code, state and area code are mutually exclusive" if (options.keys & MUTUALLY_EXCLUSIVE_OPTIONS).size > 1
         raise ArgumentError, "Unknown option passed: #{options.keys - OPTIONS}" if (options.keys - OPTIONS).size > 0
+        available_numbers_array = []
 
-        LazyArray.new do |page, size|
-          numbers, _headers = short_http.get 'availableNumbers/local', options.merge(page: page, size: size)
+        numbers, _headers = short_http.get 'availableNumbers/local', options
 
-          numbers.map do |number|
-            Types::LocalPhoneNumber.new number
-          end
+        numbers.map do |number|
+          available_numbers_array << Types::LocalPhoneNumber.new(number)
         end
+        return available_numbers_array
       end
 
       # Searches for available Toll Free numbers
@@ -56,19 +56,20 @@ module Bandwidth
       #
       def available_toll_free_numbers options = {}
         raise ArgumentError, "Unknown option passed: #{options.keys - OPTIONS}" if (options.keys - OPTIONS).size > 0
+       
+        available_numbers_array = []
 
-        LazyArray.new do |page, size|
-          numbers, _headers = short_http.get 'availableNumbers/tollFree', options.merge(page: page, size: size)
+        numbers, _headers = short_http.get 'availableNumbers/tollFree', options
 
-          numbers.map do |number|
-            Types::PhoneNumber.new number
-          end
+        numbers.map do |number|
+          available_numbers_array << Types::LocalPhoneNumber.new(number)
         end
+        return available_numbers_array
       end
 
     private
-      OPTIONS = [:zip, :state, :area_code, :city, :pattern].freeze
-      MUTUALLY_EXCLUSIVE_OPTIONS = [:zip, :state, :area_code].freeze
+      OPTIONS = [:zip, :state, :areaCode, :city, :pattern, :quantity].freeze
+      MUTUALLY_EXCLUSIVE_OPTIONS = [:zip, :state, :areaCode].freeze
       TOLL_FREE_OPTIONS = [:pattern].freeze
     end
   end

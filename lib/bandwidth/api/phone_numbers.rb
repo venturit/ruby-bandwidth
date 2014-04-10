@@ -37,10 +37,11 @@ module Bandwidth
       # @example
       #   number_id = bandwidth.allocate_number "+19195551212"
       #
-      def allocate_number phone_number, name=nil
-        options = {number: phone_number}
-        options.merge!(name: name) if name
+      def allocate_number options={}
+        raise ArgumentError, "Unknown option passed: #{options.keys - PURCHASE_OPTIONS}" if (options.keys - PURCHASE_OPTIONS).size > 0
         _body, headers = post 'phoneNumbers', options
+        puts _body
+        puts headers 
         headers['location'].match(/[^\/]+$/)[0]
       end
 
@@ -69,5 +70,8 @@ module Bandwidth
         nil
       end
     end
+
+    private
+      PURCHASE_OPTIONS = [:applicationId, :name, :number, :fallbackNumber].freeze
   end
 end
