@@ -109,9 +109,9 @@ module Bandwidth
       #       #
       #
       def transfer call_id, target, options={}
-        parameters = {state: 'transferring', transferTo: target}
-        parameters.merge!({transferCallerId: options[:transferCallerId]}) if options[:transferCallerId]
-        parameters.merge!({whisperAudio: options[:audio].to_hash}) if options[:audio]
+        parameters = {state: 'transferring', transfer_to: target}
+        parameters.merge!({transfer_caller_id: options[:transfer_caller_id]}) if options[:transfer_caller_id]
+        parameters.merge!({whisper_audio: options[:audio].to_hash}) if options[:audio]
 
         _body, headers = post "calls/#{call_id}", parameters
 

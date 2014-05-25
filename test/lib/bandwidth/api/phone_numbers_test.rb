@@ -51,34 +51,34 @@ describe Bandwidth::API::PhoneNumbers do
   end
 
   it "sets id or number when allocating a number" do
-    number_id = "n-6nuymbplrb3zd5yazve2ley"
+    number = "+19195551212"
 
     @bandwidth.stub.post('/phoneNumbers') do |request|
       parsed_body = JSON.parse request[:body]
 
-      assert_equal number_id, parsed_body['number']
+      assert_equal number, parsed_body['number']
       assert_equal nil, parsed_body['name']
 
-      [201, {location: "https://api.catapult.inetwork.com/v1/users/user_id/phoneNumbers/#{number_id}"}, ""]
+      [201, {location: "https://api.catapult.inetwork.com/v1/users/user_id/phoneNumbers/#{number}"}, ""]
     end
 
-    @bandwidth.allocate_number number_id
+    @bandwidth.allocate_number number: number
   end
 
-  it "sets name when allocating a number" do
-    number_id = "n-6nuymbplrb3zd5yazve2ley"
+  it "sets name and application id when allocating a number" do
+    number = "+19195551212"
     name = "home number"
-
+    application_id = "a-6nuymbplrb3zd5yazve2ley"
     @bandwidth.stub.post('/phoneNumbers') do |request|
       parsed_body = JSON.parse request[:body]
 
-      assert_equal number_id, parsed_body['number']
+      assert_equal number, parsed_body['number']
       assert_equal name, parsed_body['name']
 
-      [201, {location: "https://api.catapult.inetwork.com/v1/users/user_id/phoneNumbers/#{number_id}"}, ""]
+      [201, {location: "https://api.catapult.inetwork.com/v1/users/user_id/phoneNumbers/#{number}"}, ""]
     end
 
-    @bandwidth.allocate_number number_id, name
+    @bandwidth.allocate_number application_id: application_id, number: number, name: name
   end
 
   it "returns allocated number id" do
@@ -86,7 +86,7 @@ describe Bandwidth::API::PhoneNumbers do
 
     @bandwidth.stub.post('/phoneNumbers') {[201, {location: "https://api.catapult.inetwork.com/v1/users/user_id/phoneNumbers/#{number_id}"}, ""]}
 
-    assert_equal number_id, @bandwidth.allocate_number("+19195551212")
+    assert_equal number_id, @bandwidth.allocate_number(number: "+19195551212")
   end
 
   it "returns allocated phone number information" do

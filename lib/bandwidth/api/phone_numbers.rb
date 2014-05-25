@@ -40,8 +40,6 @@ module Bandwidth
       def allocate_number options={}
         raise ArgumentError, "Unknown option passed: #{options.keys - PURCHASE_OPTIONS}" if (options.keys - PURCHASE_OPTIONS).size > 0
         _body, headers = post 'phoneNumbers', options
-        puts _body
-        puts headers 
         headers['location'].match(/[^\/]+$/)[0]
       end
 
@@ -72,6 +70,6 @@ module Bandwidth
     end
 
     private
-      PURCHASE_OPTIONS = [:applicationId, :name, :number, :fallbackNumber].freeze
+      PURCHASE_OPTIONS = [:application_id, :name, :number, :fallback_number].freeze
   end
 end
