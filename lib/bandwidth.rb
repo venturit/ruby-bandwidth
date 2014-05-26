@@ -35,6 +35,8 @@ require "bandwidth/version"
 
 module Bandwidth
 
+   autoload :TestHelpers,        'bandwidth/test_helpers'
+
   # Connect to Bandwidth API
   #
   # @param user_id [String] Your Bandwidth User Id
