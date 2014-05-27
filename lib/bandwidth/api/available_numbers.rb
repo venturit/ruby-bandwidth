@@ -38,6 +38,11 @@ module Bandwidth
 
       end
 
+      def number_info phone_number 
+        cnam, _headers = short_http.get "phoneNumbers/numberInfo/#{phone_number}"
+        return cnam["name"]
+      end
+
       # Searches for available Toll Free numbers
       #
       # @param [Hash] options The options to search numbers with
